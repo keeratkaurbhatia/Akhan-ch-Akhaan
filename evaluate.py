@@ -6,8 +6,7 @@ from rouge_score import rouge_scorer
 from bert_score import score as bert_score_calculator
 
 def evaluate_performance():
-    # This variable will point to our data source.
-    # We will change it once in this process.
+
     EVALUATION_FILE = 'gold_standard_evaluation_set.json'    
     try:
         with open(EVALUATION_FILE, 'r', encoding='utf-8') as f:
