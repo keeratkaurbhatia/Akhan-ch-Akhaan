@@ -1,5 +1,7 @@
+# app.py
+# Final corrected version for Streamlit deployment.
+
 import streamlit as st
-from analyzer import analyze_proverb
 from aksharamukha import transliterate
 from thefuzz import process
 import json
@@ -29,10 +31,11 @@ def load_and_prepare_data(file_path):
 st.title("👁️ ਅੱਖਾਂ 'ਚ ਅਖਾਣ")
 st.caption("Ancient wisdom through a modern lens.")
 
+# Correctly loads the final, merged data file.
 proverbs_list = load_and_prepare_data('proverbs_app_data.json')
 
 if not proverbs_list:
-    st.error("Could not load `proverbs.json`.")
+    st.error("Could not load `proverbs_app_data.json`. Please ensure this file is in your GitHub repository.")
 else:
     iast_to_proverb_map = {p['transliteration_iast']: p for p in proverbs_list}
     
@@ -62,16 +65,17 @@ else:
         st.subheader("📜 Proverb Analysis")
         if 'selected_proverb' in st.session_state:
             selected = st.session_state['selected_proverb']
-            st.info(f"**Analyzing:** {selected['proverb_gurmukhi']}")
+            st.info(f"**Selected:** {selected['proverb_gurmukhi']}")
 
-            with st.spinner("🧠 The AI is thinking..."):
-                analysis_data = analyze_proverb(selected['proverb_gurmukhi'], selected['literal_translation'])
-
-            if "error" not in analysis_data:
-                st.success(f"**Meaning:** {analysis_data.get('actual_translation', 'Not found.')}")
-                with st.expander("View Deeper Context"):
-                    st.markdown(analysis_data.get('deeper_analysis', "Not found."))
+        
+            if 'analysis' in selected:
+                analysis_data = selected['analysis']
+                st.success(f"**Meaning:** {analysis_data.get('actual_translation', 'Meaning not available.')}")
+                with st.expander("View Deeper Context & Example"):
+                    st.markdown(analysis_data.get('deeper_analysis', "Deeper analysis not available."))
             else:
-                st.error(f"An API error occurred: {analysis_data['error']}")
+                st.warning("Analysis data is missing for this proverb in the app data file.")
+                
         else:
             st.info("Select a proverb from the search results to see its meaning here.")
+
