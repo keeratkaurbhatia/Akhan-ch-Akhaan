@@ -1,5 +1,4 @@
 import streamlit as st
-from analyzer import analyze_proverb
 from aksharamukha import transliterate
 from thefuzz import process
 import json
